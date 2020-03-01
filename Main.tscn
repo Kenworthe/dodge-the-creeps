@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Main.gd" type="Script" id=1]
+[ext_resource path="res://Enemy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=3]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 5.56716, 11.908, 0, 0, 0, 0, 469.747, 10.7435, 0, 0, 0, 0, 469.747, 712.915, 0, 0, 0, 0, 10.244, 709.422, 0, 0, 0, 0, 5.56716, 11.908 )
+}
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 1 )
+Enemy = ExtResource( 2 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 229.918, 214.103 )
+
+[node name="StartTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="StartPosition" type="Position2D" parent="."]
+position = Vector2( 240, 412 )
+
+[node name="Enemy" parent="StartPosition" instance=ExtResource( 2 )]
+position = Vector2( -6.27209, 107.563 )
+
+[node name="EnemySpawnPath" type="Path2D" parent="."]
+position = Vector2( 1.1714, -1.16867 )
+scale = Vector2( 0.997549, 1.00162 )
+curve = SubResource( 1 )
+
+[node name="EnemySpawnLocation" type="PathFollow2D" parent="EnemySpawnPath"]
+position = Vector2( 5.56716, 11.908 )
+rotation = -0.00250905
+[connection signal="hit" from="Player" to="." method="_on_Player_hit"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_ScoreTimer_timeout"]
+[connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]

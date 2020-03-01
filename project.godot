@@ -9,18 +9,31 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "RigidBody2D",
+"class": "Enemy",
+"language": "GDScript",
+"path": "res://Enemy.gd"
+}, {
+"base": "Node2D",
+"class": "Main",
+"language": "GDScript",
+"path": "res://Main.gd"
+}, {
 "base": "Area2D",
 "class": "Player",
 "language": "GDScript",
 "path": "res://Player.gd"
 } ]
 _global_script_class_icons={
-"Player": "res://art/playerGrey_walk1.png"
+"Enemy": "",
+"Main": "",
+"Player": ""
 }
 
 [application]
 
 config/name="Dodge the Creeps"
+run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
 [display]

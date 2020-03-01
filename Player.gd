@@ -8,16 +8,20 @@ extends Area2D
 # defines a custom signal "hit", which Player can emit.
 signal hit
 
-class_name Player, "res://art/playerGrey_walk1.png"
+class_name Player
 
 # export allows you to view/edit the property in Inspector (Godot UI).
 export var speed = 400 # pixels/sec
 var screen_size
 
+onready var collision_shape_2d = $CollisionShape2D
+var collision_shape_2d_radius
+var collision_shape_2d_height
+
 func _ready() -> void:
   screen_size = get_viewport_rect().size
-
-  hide()
+  collision_shape_2d_radius = collision_shape_2d.get_shape().radius
+  collision_shape_2d_height = collision_shape_2d.get_shape().height
 
 func _process(delta: float) -> void:
   var velocity = Vector2()
@@ -50,5 +54,16 @@ func _process(delta: float) -> void:
 
   # Move the player.
   position += velocity * delta
-  position.x = clamp(position.x, 0, screen_size.x)
-  position.y = clamp(position.y, 0, screen_size.y)
+  position.x = clamp(position.x, collision_shape_2d_radius, screen_size.x - collision_shape_2d_radius)
+  position.y = clamp(position.y, collision_shape_2d_height + 20, (screen_size.y - collision_shape_2d_height - 20))
+
+func _on_Player_body_entered(body: PhysicsBody2D) -> void:
+  hide()  # Player disappears after being hit.
+  emit_signal("hit")
+  print("I've been hit!!!")
+  $CollisionShape2D.set_deferred("disabled", true)
+
+func start(pos):
+  position = pos
+  show()
+  $CollisionShape2D.disabled = false
